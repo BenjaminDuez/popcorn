@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
             registerForm.classList.add('open')
             loginForm.classList.add('open')
             btnProfil.classList.add('close')
-            btnConnect.claclassList.add('open')
+            btnConnect.classList.add('open')
         }
         btnProfil.addEventListener('click', event => {
             if(!profilSection.classList.contains('open')){
