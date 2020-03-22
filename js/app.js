@@ -275,6 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const displayPopin = data => {
+            console.log(data)
             moviePopin.innerHTML = `
                 <div>
                     <img src="https://image.tmdb.org/t/p/w500/${data.poster_path}" alt="${data.original_title}">
