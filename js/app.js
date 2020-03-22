@@ -324,18 +324,13 @@ document.addEventListener('DOMContentLoaded', () => {
             button.addEventListener('click', () => {
                 if(localStorage.getItem('user_id')){
                     let ip = null
-                    fetch('https://api.ipify.org/?format=json',{
-                        method: 'GET',
-                    })
+                    fetch("https://api.ipify.org/?format=json", {"credentials":"omit","headers":{"accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9","accept-language":"fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7","cache-control":"max-age=0","sec-fetch-dest":"document","sec-fetch-mode":"navigate","sec-fetch-site":"none","sec-fetch-user":"?1","upgrade-insecure-requests":"1"},"referrerPolicy":"no-referrer-when-downgrade","body":null,"method":"GET","mode":"cors"})
                     .then(r => {
-                        return r.json()
+                        console.log(r)
+                        ip = r.ip
                     })
-                    .then(jsonData => {
-                        console.log('fetch result', jsonData.ip)
-                        ip = jsonData.ip
-                    })
-                    .catch(error => {
-                        console.error(error)
+                    .catch(err => {
+                        console.error(err)
                     })
                     let idFilm = button.getAttribute('movie-id')
                     fetch('https://vsrequest.video/request.php?key=hTYf5EHcjvyQNYyq&secret_key=kkyexzqxvo5jeewlppqpsxs32ftzii&video_id='+idFilm+'&ip='+ip,{
