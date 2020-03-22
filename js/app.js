@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div>
                     <h2>${data.original_title}</h2>
                     <p>${data.overview}</p>
-                    <button id="getStream" movie-id="${data.id}">Voir en streaming</button>
+                    <button id="getStream" movie-id="${data.imdb_id}">Voir en streaming</button>
                     <button movie-id="${data.id}" movie-title="${data.original_title}" id="addFavorite">Ajouter en favoris</button>
                     <button id="closeButton">Close</button>
                 </div>
