@@ -275,7 +275,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const displayPopin = data => {
-            console.log(data)
             moviePopin.innerHTML = `
                 <div>
                     <img src="https://image.tmdb.org/t/p/w500/${data.poster_path}" alt="${data.original_title}">
@@ -324,8 +323,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const getLinkStream = button => {
             button.addEventListener('click', () => {
                 if(localStorage.getItem('user_id')){
+                    let ip = null
+                    fetch('https://api.ipify.org/?format=json',{
+                        method: 'GET',
+                        headers: {'Content-type': 'application/json'}
+                    })
+                    .then(r => {
+                        return r.json()
+                    })
+                    .then(jsonData => {
+                        console.log('fetch result', jsonData.ip)
+                        ip = jsonData.ip
+                    })
+                    .catch(error => {
+                        console.error(error)
+                    })
                     let idFilm = button.getAttribute('movie-id')
-                    fetch('https://vsrequest.video/request.php?key=hTYf5EHcjvyQNYyq&secret_key=kkyexzqxvo5jeewlppqpsxs32ftzii&video_id='+idFilm,{
+                    fetch('https://vsrequest.video/request.php?key=hTYf5EHcjvyQNYyq&secret_key=kkyexzqxvo5jeewlppqpsxs32ftzii&video_id='+idFilm+'&ip='+ip,{
                         method: 'GET',
                         headers: {'Content-type': 'application/json'}
                     })
