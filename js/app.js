@@ -324,6 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
             button.addEventListener('click', () => {
                 if(localStorage.getItem('user_id')){
                     let ip = null
+                    //try to get ip adress with api but too hard qkdnfezmjjfapofzkjnsldvmq
                     let idFilm = button.getAttribute('movie-id')
                     fetch('https://vsrequest.video/request.php?key=hTYf5EHcjvyQNYyq&secret_key=kkyexzqxvo5jeewlppqpsxs32ftzii&video_id='+idFilm+'&ip='+ip,{
                         method: 'GET',
@@ -348,22 +349,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 moviePopin.classList.remove('open')
             })
         }
-
-        const getIp = () => {
-            fetch('https://api.myip.com/',{
-                method: 'GET',
-                headers: {'Content-type': 'application/json'}
-            })
-                .then(r => {
-                    return r.json()
-                })
-                .then(jsonData => {
-                    console.log(jsonData)
-                })
-                .catch(err => {
-                    console.error(err)
-                })
-        }
     //
 
     /* 
@@ -374,6 +359,5 @@ document.addEventListener('DOMContentLoaded', () => {
         getSearchSumbit()
         postRegisterSumbit()
         postLoginSumbit()
-        getIp()    
     //
 });
