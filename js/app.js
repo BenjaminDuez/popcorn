@@ -326,7 +326,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     let ip = null
                     fetch('https://api.ipify.org/?format=json',{
                         method: 'GET',
-                        headers: {'Content-type': 'application/json'}
                     })
                     .then(r => {
                         return r.json()
