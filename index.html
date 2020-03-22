@@ -15,26 +15,9 @@
             pseudo: "Bduez6"
             password: "1234567890" -->
         <header>
-            <button id="connection">Se connecter / S'inscrire</button>
+            <button id="logout">Déconnexion</button>
             <button id="profil">Mon profil</button>
-            <button class="chat">Chat</button>
             <div>
-                <form id="register" action="#">
-                    <label for="email">Mail</label>
-                    <input type="text" name="email" id="email" minlength="1" required>
-                    <label for="pseudo">Pseudo</label>
-                    <input type="text" name="pseudo" id="pseudo" minlength="1" required>
-                    <label for="password">Mot de passe</label>
-                    <input type="password" name="password" id="password" minlength="1" required>
-                    <button type="submit">S'inscrire</button>
-                </form>
-                <form id="login" action="#">
-                        <label for="emailLogin">Mail</label>
-                        <input type="text" name="email" id="emailLogin" minlength="1" required>
-                        <label for="passwordLogin">Mot de passe</label>
-                        <input type="password" name="password" id="passwordLogin" minlength="1" required>
-                        <button type="submit">Se connecter</button>
-                    </form>
                 <form id="searchDataForm" action="#">
                     <label for="searchData">Search a movie <span></span></label>
                     <input type="text" name="searchData" id="searchData" minlength="1" required>
@@ -45,13 +28,25 @@
         </header>
 
         <main>
-            <section id="chatSection" class="close">
+            <section id="logSection" class="close">
                 <div>
-                    <button class="chat">Close</button>
-                    <form id="chatForm" action="#">
-                        <label for="messageData">Message<span></span></label>
-                        <input type="text" name="messageData" id="messageData" minlength="1" required>
-                        <button type="submit">Envoyer</button>
+                    <button id="loginBtn" class="close">Se connecter</button>
+                    <button id="registerBtn" >S'inscrire</button>
+                    <form id="register" action="#" class="close">
+                            <label for="email">Mail</label>
+                            <input type="text" name="email" id="email" minlength="1" required>
+                            <label for="pseudo">Pseudo</label>
+                            <input type="text" name="pseudo" id="pseudo" minlength="1" required>
+                            <label for="password">Mot de passe</label>
+                            <input type="password" name="password" id="password" minlength="1" required>
+                            <button type="submit">S'inscrire</button>
+                    </form>
+                    <form id="login" action="#">
+                            <label for="emailLogin">Mail</label>
+                            <input type="text" name="email" id="emailLogin" minlength="1" required>
+                            <label for="passwordLogin">Mot de passe</label>
+                            <input type="password" name="password" id="passwordLogin" minlength="1" required>
+                            <button type="submit">Se connecter</button>
                     </form>
                 </div>
             </section>
@@ -72,7 +67,6 @@
         <footer>
             <p>Under WTFPL - Julien Noyer 2020</p>
         </footer>
-        <script src="//cdn.jsdelivr.net/npm/pouchdb@7.1.1/dist/pouchdb.min.js"></script>
         <script src="./js/app.js"></script>
     </body>
 </html>

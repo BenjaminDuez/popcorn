@@ -9,23 +9,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const registerForm = document.querySelector('#register');
         const loginForm = document.querySelector('#login');
         const searchForm = document.querySelector('#searchDataForm');
-        const chatForm = document.querySelector('#chatForm')
 
         const searchLabel = document.querySelector('header form span');
         const searchData = document.querySelector('[name="searchData"]');
-        const messageData = document.querySelector('[name="messageData"]');
         const api_key = '5bc5808f012c27ff4c3564f5822edd37'
         const themoviedbUrl = `https://api.themoviedb.org/3/search/movie?api_key=${api_key}&query=`;
         const movieList = document.querySelector('#movieList');
         const moviePopin = document.querySelector('#moviePopin');
         const favSection = document.querySelector('#favoritesFilmSection');
-        const btnConnect = document.querySelector('#connection')
+        const btnLogout = document.querySelector('#logout')
         const btnProfil = document.querySelector('#profil')
         const btnCloseProfil = document.querySelector('#closeProfil')
-        const btnChat = document.querySelectorAll('.chat')
         const profilSection = document.querySelector('#profilSection')
-        const chatSection = document.querySelector('#chatSection')
-    
+        const logSection = document.querySelector('#logSection')
+        const btnLogin = document.querySelector('#loginBtn')
+        const btnRegister = document.querySelector('#registerBtn')
         
         let favoritesFilm = [];
     //
@@ -38,32 +36,59 @@ document.addEventListener('DOMContentLoaded', () => {
         if(localStorage.getItem('user_id')){
             getProfil(localStorage.getItem('user_id'))
             btnProfil.classList.add('open')
-            btnConnect.classList.add('close')
+            btnLogout.classList.add('open')
             registerForm.classList.add('close')
             loginForm.classList.add('close')
         } else {
-            registerForm.classList.add('open')
             loginForm.classList.add('open')
             btnProfil.classList.add('close')
-            btnConnect.classList.add('open')
+            btnLogout.classList.add('close')
+            logSection.classList.add('open')
+
         }
+        btnLogin.addEventListener('click',event => {
+            btnRegister.classList.remove('close')
+            btnRegister.classList.add('open')
+            btnLogin.classList.remove('open')
+            btnLogin.classList.add('close')
+            registerForm.classList.remove('open')
+            registerForm.classList.add('close')
+            loginForm.classList.add('open')
+            loginForm.classList.remove('close')           
+        })
+        btnRegister.addEventListener('click',event => {
+            btnRegister.classList.remove('open')
+            btnRegister.classList.add('close')
+            btnLogin.classList.remove('close')
+            btnLogin.classList.add('open')
+            registerForm.classList.add('open')
+            registerForm.classList.remove('close')
+            loginForm.classList.remove('open')
+            loginForm.classList.add('close')       
+        })
+        btnLogout.addEventListener('click', event => {
+            if(registerForm.classList.contains('open')){
+                registerForm.classList.remove('open')
+                registerForm.classList.add('close')
+            }
+            if(btnLogin.classList.contains('open')){
+                btnLogin.classList.remove('open')
+                btnLogin.classList.add('close')
+                btnRegister.classList.add('open')
+                btnRegister.classList.remove('close')
+            }
+            btnProfil.classList.add('close')
+            btnProfil.classList.remove('open')
+            btnLogout.classList.remove('open')
+            localStorage.removeItem('user_id')
+            checkUserConnect()
+        })
         btnProfil.addEventListener('click', event => {
             if(!profilSection.classList.contains('open')){
                 profilSection.classList.remove('close')
                 profilSection.classList.add('open')
 
             }
-        })
-        btnChat.forEach(btn => {
-            btn.addEventListener('click', event => {
-                if(!chatSection.classList.contains('open')){
-                    chatSection.classList.remove('close')
-                    chatSection.classList.add('open')
-                } else {
-                    chatSection.classList.remove('open')
-                    chatSection.classList.add('close')
-                }
-            })
         })
         btnCloseProfil.addEventListener('click', event => {
             if(profilSection.classList.contains('open')){
@@ -79,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
                return r.json()
             })
             .then(jsonData => {
+                console.log(jsonData)
                 favoritesFilm = jsonData.data.favorite
                 displayFavoritesFilm()
             })
@@ -94,11 +120,28 @@ document.addEventListener('DOMContentLoaded', () => {
             
             favoritesFilm.forEach( film => {
                 favSection.innerHTML += `
-                <li>${film.title} <button class="fav" movie-id="${film.id}">Voir les détails</button></li>
+                <li>${film.title} <button class="fav" movie-id="${film.id}">Voir les détails</button><button class="del-fav" fav-id="${film._id}">Supprimer</button></li>
                 `;
             })
 
             getPopinLink( document.querySelectorAll('.fav') );
+
+            document.querySelectorAll('.del-fav').forEach(btn => {
+                btn.addEventListener('click', event => {
+                    fetch('https://api.dwsapp.io/api/favorite/'+btn.getAttribute('fav-id'), {
+                        method: 'DELETE',
+                        headers: {'Content-type': 'application/json'}
+                    })
+                    .then(r => {
+                        getProfil(localStorage.getItem('user_id'))
+                        displayFavoritesFilm()
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    })
+                })
+            })
+           
         };
 
         const getSearchSumbit = () => {
@@ -110,34 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 searchData.value.length > 0 
                 ? fetchFunction(searchData.value) 
                 : displayError(searchData, 'Minimum 1 caractère')
-            })
-        }
-
-        const getMessageSumbit = () => {
-            var db = new PouchDB('chat');
-        
-        
-            chatForm.addEventListener('submit', event => {
-                // Stop event propagation
-                event.preventDefault();
-
-                // Check form data
-                if(messageData.value.length > 0){
-                    db.put({
-                        _id: new Date().toISOString(),
-                        author: localStorage.getItem('user_id'),
-                        pseudo: 'Bduez',
-                        message: messageData.value,
-                    });
-
-                    db.changes().on('change', function() {
-                        console.log('Ch-Ch-Changes');
-                    });
-                    PouchDB.replicate('chat','https://couch.dwsapp.io/chat_room/', {
-                        live: true,
-                        retry: true
-                    });
-                }
             })
         }
 
@@ -188,8 +203,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 return r.json()
             })
             .then( jsonData => {
-                if(jsonData.data.user._id){
-                    window.localStorage.setItem('user_id', jsonData.data.user._id);
+                if(jsonData.data.identity._id){
+                    window.localStorage.setItem('user_id', jsonData.data.identity._id);
+                    logSection.classList.remove('open')
+                    logSection.classList.add('close')
+                    btnLogout.classList.remove('close')
+                    btnLogout.classList.add('open')
+                    getProfil(localStorage.getItem('user_id'))
+                    if(btnProfil.classList.contains('close')){
+                        btnProfil.classList.remove('close')
+                        btnProfil.classList.add('open')
+                    }
                 }
             })
             .catch(err => {
@@ -310,8 +334,6 @@ document.addEventListener('DOMContentLoaded', () => {
         checkUserConnect()
         getSearchSumbit()
         postRegisterSumbit()
-        postLoginSumbit()
-        getMessageSumbit()
-        
+        postLoginSumbit()        
     //
 });
