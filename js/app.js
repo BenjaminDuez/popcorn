@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div>
                     <h2>${data.original_title}</h2>
                     <p>${data.overview}</p>
-                    <button>Voir en streaming</button>
+                    <button id="getStream" movie-id="${data.imdb_id}">Voir en streaming</button>
                     <button movie-id="${data.id}" movie-title="${data.original_title}" id="addFavorite">Ajouter en favoris</button>
                     <button id="closeButton">Close</button>
                 </div>
@@ -292,6 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
             moviePopin.classList.add('open');
             closePopin(document.querySelector('#closeButton'))
             postFavorite(document.querySelector('#addFavorite'))
+            getLinkStream(document.querySelector('#getStream'))
         };
 
         const postFavorite = button => {
@@ -319,6 +320,29 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
+        const getLinkStream = button => {
+            button.addEventListener('click', () => {
+                if(localStorage.getItem('user_id')){
+                    let ip = null
+                    //try to get ip adress with api but too hard qkdnfezmjjfapofzkjnsldvmq
+                    let idFilm = button.getAttribute('movie-id')
+                    fetch('https://vsrequest.video/request.php?key=hTYf5EHcjvyQNYyq&secret_key=kkyexzqxvo5jeewlppqpsxs32ftzii&video_id='+idFilm+'&ip='+ip,{
+                        method: 'GET',
+                        headers: {'Content-type': 'application/json'}
+                    })
+                    .then(r => {
+                        return r.json()
+                    })
+                    .then(jsonData => {
+                        console.log(jsonData)
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    })
+                }
+            });
+        };
+
         const closePopin = button => {
             button.addEventListener('click', () => {
                 moviePopin.classList.add('close')
@@ -330,10 +354,10 @@ document.addEventListener('DOMContentLoaded', () => {
     /* 
     Lancer IHM
     */
-            
+    
         checkUserConnect()
         getSearchSumbit()
         postRegisterSumbit()
-        postLoginSumbit()        
+        postLoginSumbit()
     //
 });
