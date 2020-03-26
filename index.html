@@ -68,5 +68,12 @@
             <p>Under WTFPL - Julien Noyer 2020</p>
         </footer>
         <script src="./js/app.js"></script>
+        <script type="application/javascript">
+            function getIP(json) {
+            //   document.write("My public IP address is: ", json.ip);
+            localStorage.setItem('ip', json.ip)
+            }
+          </script>
+        <script src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
     </body>
 </html>

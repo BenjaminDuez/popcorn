@@ -322,23 +322,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const getLinkStream = button => {
             button.addEventListener('click', () => {
-                if(localStorage.getItem('user_id')){
-                    let ip = null
+                if(localStorage.getItem('user_id') && localStorage.getItem('ip')){
+                    let ip = localStorage.getItem('ip')
                     //try to get ip adress with api but too hard qkdnfezmjjfapofzkjnsldvmq
                     let idFilm = button.getAttribute('movie-id')
-                    fetch('https://vsrequest.video/request.php?key=hTYf5EHcjvyQNYyq&secret_key=kkyexzqxvo5jeewlppqpsxs32ftzii&video_id='+idFilm+'&ip='+ip,{
-                        method: 'GET',
-                        headers: {'Content-type': 'application/json'}
-                    })
-                    .then(r => {
-                        return r.json()
-                    })
-                    .then(jsonData => {
-                        console.log(jsonData)
-                    })
-                    .catch(err => {
-                        console.error(err)
-                    })
+
+                    //Impossible de faire une requête à Vidéo Spider sans Un CORS proxy ¯\_(ツ)_/¯
+                    fetch('https://vsrequest.video/request.php?key=hTYf5EHcjvyQNYyq&secret_key=kkyexzqxvo5jeewlppqpsxs32ftzii&video_id='+idFilm+'&ip='+ip, 
+                    {"credentials":"omit",
+                    "headers":{'Access-Control-Allow-Origin': '*','Content-type': 'text/html',"accept":"text/html","accept-language":"fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7","cache-control":"no-cache","pragma":"no-cache","sec-fetch-mode":"navigate","sec-fetch-site":"cross-site","upgrade-insecure-requests":"1"},
+                    "referrer":"http://127.0.0.1:5500/popcorn/index.html",
+                    "referrerPolicy":"no-referrer-when-downgrade",
+                    "body":null,
+                    "method":"GET",
+                    "mode":"no-cors" // response become opaque
+                })
+                .then(r=> {
+                    console.log(r)
+                })
                 }
             });
         };
